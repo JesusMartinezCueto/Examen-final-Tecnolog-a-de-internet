@@ -1,0 +1,23 @@
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark bg-success shadow-sm">
+    <div class="container">
+      <a class="navbar-brand d-flex flex-column lh-1" routerLink="/inicio" (click)="menuAbierto.set(false)">
+        <span class="fw-bold">Ganadería El Puente</span>
+        <small class="fw-light encabezado-sub">Comercio de ganado bovino</small>
+      </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        aria-controls="menu-principal"
+        [attr.aria-expanded]="menuAbierto()"
+        aria-label="Abrir menú"
+        (click)="menuAbierto.set(!menuAbierto())"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="menu-principal" class="collapse navbar-collapse" [class.show]="menuAbierto()">
+        <app-menu-navegacion (navegar)="menuAbierto.set(false)" />
+      </div>
+    </div>
+  </nav>
+</header>

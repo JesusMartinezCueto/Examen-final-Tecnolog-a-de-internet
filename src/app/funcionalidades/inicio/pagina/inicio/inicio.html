@@ -1,0 +1,59 @@
+<h1 class="h3 mb-3">Bienvenido a Ganadería El Puente</h1>
+<p class="text-muted">Consulte el ganado disponible, registre ventas por cabeza y dé seguimiento a su entrega.</p>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-lg-3">
+    <div class="card text-center h-100"><div class="card-body">
+      <div class="small text-muted">Lotes</div>
+      <div class="fs-3 fw-bold">{{ lotes().length }}</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card text-center h-100"><div class="card-body">
+      <div class="small text-muted">Cabezas disponibles</div>
+      <div class="fs-3 fw-bold">{{ cabezasDisponibles() | number }}</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card text-center h-100"><div class="card-body">
+      <div class="small text-muted">Ventas pendientes</div>
+      <div class="fs-3 fw-bold text-warning">{{ pendientes() }}</div>
+    </div></div>
+  </div>
+  <div class="col-6 col-lg-3">
+    <div class="card text-center h-100"><div class="card-body">
+      <div class="small text-muted">Ingresos entregados</div>
+      <div class="fs-5 fw-bold text-success">{{ ingresos() | currency: 'BOB' : 'Bs ' : '1.0-0' }}</div>
+    </div></div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-md-4">
+    <article class="card h-100">
+      <div class="card-body">
+        <h2 class="h5 card-title">Catálogo</h2>
+        <p class="card-text">Busque lotes por raza o categoría.</p>
+        <a class="btn btn-success" routerLink="/catalogo">Ver ganado</a>
+      </div>
+    </article>
+  </div>
+  <div class="col-12 col-md-4">
+    <article class="card h-100">
+      <div class="card-body">
+        <h2 class="h5 card-title">Nueva venta</h2>
+        <p class="card-text">Registre la venta de cabezas a un comprador.</p>
+        <a class="btn btn-success" routerLink="/ventas/nueva">Registrar</a>
+      </div>
+    </article>
+  </div>
+  <div class="col-12 col-md-4">
+    <article class="card h-100">
+      <div class="card-body">
+        <h2 class="h5 card-title">Historial</h2>
+        <p class="card-text">Revise, entregue o anule las ventas.</p>
+        <a class="btn btn-success" routerLink="/ventas">Ver ventas</a>
+      </div>
+    </article>
+  </div>
+</div>

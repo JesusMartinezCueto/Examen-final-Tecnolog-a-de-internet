@@ -1,0 +1,64 @@
+<h1 class="h3 mb-3">Registrar animales</h1>
+
+<form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+  <div class="card card-body">
+    <div class="row g-3">
+      <div class="col-12 col-md-6">
+        <label for="nombre" class="form-label">Nombre*</label>
+        <input id="nombre" class="form-control" formControlName="nombre" placeholder="Ej.: novillos para engorde" [ngClass]="{ 'is-invalid': invalido('nombre') }" />
+        <div class="invalid-feedback">El nombre es obligatorio (entre 3 y 60 caracteres).</div>
+      </div>
+      <div class="col-12 col-md-3">
+        <label for="raza" class="form-label">Raza *</label>
+        <input id="raza" class="form-control" formControlName="raza" placeholder="Ej.: Nelore" [ngClass]="{ 'is-invalid': invalido('raza') }" />
+        <div class="invalid-feedback">La raza es obligatoria (entre 2 y 40 caracteres).</div>
+      </div>
+      <div class="col-12 col-md-3">
+        <label for="categoria" class="form-label">Categoría *</label>
+        <select id="categoria" class="form-select" formControlName="categoria" [ngClass]="{ 'is-invalid': invalido('categoria') }">
+          <option value="" disabled>Seleccione</option>
+          @for (cat of categorias; track cat) {
+            <option [value]="cat">{{ cat }}</option>
+          }
+        </select>
+        <div class="invalid-feedback">Seleccione una categoría.</div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <label for="pesoPromedioKg" class="form-label">Peso promedio (kg) *</label>
+        <input id="pesoPromedioKg" type="number" min="1" class="form-control" formControlName="pesoPromedioKg" [ngClass]="{ 'is-invalid': invalido('pesoPromedioKg') }" />
+        <div class="invalid-feedback">Ingrese un peso entre 1 y 2000 kg.</div>
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="precioCabeza" class="form-label">Precio por cabeza (Bs) *</label>
+        <input id="precioCabeza" type="number" min="1" class="form-control" formControlName="precioCabeza" [ngClass]="{ 'is-invalid': invalido('precioCabeza') }" />
+        <div class="invalid-feedback">Ingrese un precio mayor a 0.</div>
+      </div>
+      <div class="col-12 col-md-4">
+        <label for="existencias" class="form-label">Cantidad de cabezas *</label>
+        <input id="existencias" type="number" min="0" step="1" class="form-control" formControlName="existencias" [ngClass]="{ 'is-invalid': invalido('existencias') }" />
+        <div class="invalid-feedback">Ingrese un número entero mayor o igual a 0.</div>
+      </div>
+
+      <div class="col-12">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <textarea id="descripcion" rows="2" class="form-control" formControlName="descripcion" [ngClass]="{ 'is-invalid': invalido('descripcion') }"></textarea>
+        <div class="invalid-feedback">Máximo 200 caracteres.</div>
+      </div>
+    </div>
+
+    @if (error()) {
+      <div class="alert alert-danger py-2 mt-3" role="alert">{{ error() }}</div>
+    }
+
+    <div class="d-flex gap-2 mt-3">
+      <button type="submit" class="btn btn-success" [disabled]="guardando()">
+        @if (guardando()) {
+          <span class="spinner-border spinner-border-sm me-1"></span>
+        }
+        Guardar
+      </button>
+      <a routerLink="/catalogo" class="btn btn-outline-secondary">Cancelar</a>
+    </div>
+  </div>
+</form>

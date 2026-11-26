@@ -1,0 +1,100 @@
+<h1 class="h3 mb-3">Registrar venta de ganado</h1>
+
+<form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+  <div class="row g-4">
+    <div class="col-12 col-lg-8">
+      <div class="card card-body">
+        <h2 class="h5">Ganado</h2>
+        <div class="row g-3">
+          <div class="col-12 col-md-8">
+            <label for="loteId" class="form-label">Lote *</label>
+            <select id="loteId" class="form-select" formControlName="loteId" [ngClass]="{ 'is-invalid': invalido('loteId') }">
+              <option [ngValue]="0" disabled>Seleccione un lote</option>
+              @for (lote of lotes(); track lote.id) {
+                <option [ngValue]="lote.id" [disabled]="lote.existencias === 0">
+                  {{ lote.nombre | titlecase }} ({{ lote.raza }}) – {{ lote.existencias }} disp.
+                </option>
+              }
+            </select>
+            <div class="invalid-feedback">Seleccione el lote que se va a vender.</div>
+          </div>
+          <div class="col-12 col-md-4">
+            <label for="cantidad" class="form-label">Cantidad de cabezas *</label>
+            <input
+              id="cantidad"
+              type="number"
+              min="1"
+              step="1"
+              class="form-control"
+              formControlName="cantidad"
+              [ngClass]="{ 'is-invalid': invalido('cantidad') || excedeExistencias() }"
+            />
+            @if (invalido('cantidad')) {
+              <div class="invalid-feedback">Ingrese un número entero mayor o igual a 1.</div>
+            } @else if (excedeExistencias()) {
+              <div class="invalid-feedback">
+                La cantidad supera las existencias: solo hay {{ form.errors?.['sinExistencias'].disponibles }} cabezas.
+              </div>
+            }
+          </div>
+        </div>
+
+        <h2 class="h5 mt-4">Comprador</h2>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label for="compradorNombre" class="form-label">Nombre completo *</label>
+            <input id="compradorNombre" class="form-control" formControlName="compradorNombre" [ngClass]="{ 'is-invalid': invalido('compradorNombre') }" />
+            <div class="invalid-feedback">El nombre es obligatorio (entre 3 y 80 caracteres).</div>
+          </div>
+          <div class="col-6 col-md-3">
+            <label for="compradorCi" class="form-label">CI / NIT *</label>
+            <input id="compradorCi" inputmode="numeric" class="form-control" formControlName="compradorCi" [ngClass]="{ 'is-invalid': invalido('compradorCi') }" />
+            <div class="invalid-feedback">Solo números, de 5 a 10 dígitos.</div>
+          </div>
+          <div class="col-6 col-md-3">
+            <label for="telefono" class="form-label">Celular</label>
+            <input id="telefono" inputmode="tel" class="form-control" formControlName="telefono" placeholder="7xxxxxxx" [ngClass]="{ 'is-invalid': invalido('telefono') }" />
+            <div class="invalid-feedback">8 dígitos que empiecen con 6 o 7.</div>
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="fechaEntrega" class="form-label">Fecha de entrega *</label>
+            <input id="fechaEntrega" type="date" class="form-control" [min]="fechaMinima" formControlName="fechaEntrega" [ngClass]="{ 'is-invalid': invalido('fechaEntrega') }" />
+            <div class="invalid-feedback">Elija una fecha de hoy en adelante.</div>
+          </div>
+          <div class="col-12">
+            <label for="observaciones" class="form-label">Observaciones</label>
+            <textarea id="observaciones" rows="2" class="form-control" formControlName="observaciones" [ngClass]="{ 'is-invalid': invalido('observaciones') }"></textarea>
+            <div class="invalid-feedback">Máximo 200 caracteres.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+      <div class="card card-body bg-light">
+        <h2 class="h5">Resumen</h2>
+        @if (loteSeleccionado(); as lote) {
+          <p class="mb-1">{{ lote.nombre | titlecase }}</p>
+          <p class="small text-muted">Raza {{ lote.raza }} · {{ lote.existencias }} cabezas disponibles</p>
+          <p class="mb-1">Precio por cabeza: {{ lote.precioCabeza | currency: 'BOB' : 'Bs ' }}</p>
+        } @else {
+          <p class="text-muted">Seleccione un lote para ver el total.</p>
+        }
+        <hr />
+        <p class="h4 mb-3">Total: {{ total() | currency: 'BOB' : 'Bs ' }}</p>
+
+        @if (error()) {
+          <div class="alert alert-danger py-2" role="alert">{{ error() }}</div>
+        }
+
+        <button type="submit" class="btn btn-success w-100 mb-2" [disabled]="guardando()">
+          @if (guardando()) {
+            <span class="spinner-border spinner-border-sm me-1"></span>
+          }
+          Guardar venta
+        </button>
+        <a routerLink="/catalogo" class="btn btn-outline-secondary w-100">Volver al catálogo</a>
+      </div>
+    </div>
+  </div>
+</form>

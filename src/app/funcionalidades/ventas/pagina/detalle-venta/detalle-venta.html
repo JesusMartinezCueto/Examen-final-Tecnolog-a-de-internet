@@ -1,0 +1,91 @@
+@if (cargando()) {
+  <div class="text-center py-5"><div class="spinner-border text-success" role="status"></div></div>
+} @else if (venta(); as v) {
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <h1 class="h3 mb-0">Venta #{{ v.id }} <app-estado-venta [estado]="v.estado" /></h1>
+    <a routerLink="/ventas" class="btn btn-outline-secondary">← Historial</a>
+  </div>
+
+  @if (mensaje(); as m) {
+    <div class="alert alert-dismissible" [class]="'alert-' + m.tipo" role="alert">
+      {{ m.texto }}
+      <button type="button" class="btn-close" aria-label="Cerrar" (click)="mensaje.set(null)"></button>
+    </div>
+  }
+
+  <div class="row g-3">
+    <div class="col-12 col-md-6">
+      <div class="card h-100">
+        <div class="card-header">Ganado</div>
+        <div class="card-body">
+          <h2 class="h5">{{ v.loteNombre | titlecase }}</h2>
+          <p class="text-muted">Raza {{ v.raza }}</p>
+          <dl class="row mb-0">
+            <dt class="col-7">Cabezas vendidas</dt>
+            <dd class="col-5 text-end">{{ v.cantidad | number }}</dd>
+            <dt class="col-7">Precio por cabeza</dt>
+            <dd class="col-5 text-end">{{ v.precioCabeza | currency: 'BOB' : 'Bs ' }}</dd>
+            <dt class="col-7">Total</dt>
+            <dd class="col-5 text-end fw-bold">{{ v.total | currency: 'BOB' : 'Bs ' }}</dd>
+            <dt class="col-7">Existencias actuales del lote</dt>
+            <dd class="col-5 text-end">
+              @if (lote(); as l) {
+                {{ l.existencias | number }}
+              } @else {
+                —
+              }
+            </dd>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6">
+      <div class="card h-100">
+        <div class="card-header">Comprador y entrega</div>
+        <div class="card-body">
+          <dl class="row mb-0">
+            <dt class="col-5">Nombre</dt>
+            <dd class="col-7">{{ v.compradorNombre | titlecase }}</dd>
+            <dt class="col-5">CI / NIT</dt>
+            <dd class="col-7">{{ v.compradorCi }}</dd>
+            <dt class="col-5">Celular</dt>
+            <dd class="col-7">{{ v.telefono || '—' }}</dd>
+            <dt class="col-5">Registrada</dt>
+            <dd class="col-7">{{ v.fechaRegistro | date: 'dd/MM/yyyy HH:mm' }}</dd>
+            <dt class="col-5">Entrega</dt>
+            <dd class="col-7">{{ v.fechaEntrega + 'T00:00:00' | date: 'fullDate' }}</dd>
+            @if (v.fechaActualizacion) {
+              <dt class="col-5">{{ v.estado | titlecase }} el</dt>
+              <dd class="col-7">{{ v.fechaActualizacion | date: 'dd/MM/yyyy HH:mm' }}</dd>
+            }
+            @if (v.observaciones) {
+              <dt class="col-5">Observaciones</dt>
+              <dd class="col-7">{{ v.observaciones }}</dd>
+            }
+          </dl>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-body mt-3">
+    @if (v.estado === 'pendiente') {
+      <p class="mb-2">La venta está pendiente. Puede confirmar la entrega del ganado o anularla.</p>
+      <div class="d-flex flex-column flex-sm-row gap-2">
+        <button type="button" class="btn btn-success" [disabled]="procesando()" (click)="entregar()">Marcar como entregada</button>
+        <button type="button" class="btn btn-outline-danger" [disabled]="procesando()" (click)="anular()">Anular venta</button>
+      </div>
+    } @else {
+      <p class="mb-0 text-muted">
+        Esta venta ya fue {{ v.estado }} y no admite más cambios.
+      </p>
+    }
+  </div>
+} @else {
+  <div class="alert alert-warning" role="alert">
+    <h1 class="h5">Venta no encontrada</h1>
+    <p>No existe una venta con el identificador «{{ id() }}».</p>
+    <a routerLink="/ventas" class="btn btn-outline-dark">Volver al historial</a>
+  </div>
+}

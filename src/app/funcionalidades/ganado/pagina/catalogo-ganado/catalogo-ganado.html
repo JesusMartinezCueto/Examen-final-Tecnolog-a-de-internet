@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3 mb-0">Catálogo de ganado</h1>
+  <a routerLink="/catalogo/nuevo" class="btn btn-success">+ Registrar animales</a>
+</div>
+
+<div class="card card-body mb-4">
+  <div class="row g-2 align-items-end">
+    <div class="col-12 col-md-6">
+      <label for="busqueda" class="form-label">Buscar</label>
+      <input
+        id="busqueda"
+        type="search"
+        class="form-control"
+        placeholder="Nombre, raza o descripción"
+        [value]="busqueda()"
+        (input)="busqueda.set($any($event.target).value)"
+      />
+    </div>
+    <div class="col-8 col-md-4">
+      <label for="categoria" class="form-label">Categoría</label>
+      <select
+        id="categoria"
+        class="form-select"
+        [value]="categoria()"
+        (change)="categoria.set($any($event.target).value)"
+      >
+        <option value="">Todas</option>
+        @for (cat of categorias; track cat) {
+          <option [value]="cat">{{ cat }}</option>
+        }
+      </select>
+    </div>
+    <div class="col-4 col-md-2">
+      <button type="button" class="btn btn-outline-secondary w-100" (click)="limpiarFiltros()">Limpiar</button>
+    </div>
+    <div class="col-12">
+      <div class="form-check form-switch">
+        <input
+          id="verInactivos"
+          class="form-check-input"
+          type="checkbox"
+          role="switch"
+          [checked]="verInactivos()"
+          (change)="verInactivos.set($any($event.target).checked)"
+        />
+        <label class="form-check-label" for="verInactivos">Mostrar lotes inactivos</label>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (mensaje(); as m) {
+  <div class="alert alert-dismissible" [class]="'alert-' + m.tipo" role="alert">
+    {{ m.texto }}
+    <button type="button" class="btn-close" aria-label="Cerrar" (click)="mensaje.set(null)"></button>
+  </div>
+}
+
+@if (cargando()) {
+  <div class="text-center py-5"><div class="spinner-border text-success" role="status"></div></div>
+} @else if (error()) {
+  <div class="alert alert-danger">{{ error() }}</div>
+} @else {
+  <p class="text-muted small">Mostrando {{ filtrados().length }} de {{ lotes().length }} lotes.</p>
+  <div class="row g-3">
+    @for (lote of filtrados(); track lote.id) {
+      <div class="col-12 col-sm-6 col-xl-4">
+        <app-lote-tarjeta [lote]="lote" (vender)="venderLote($event)"
+          (cambiarEstado)="cambiarEstado($event)"
+        />
+      </div>
+    } @empty {
+      <div class="col-12">
+        <div class="alert alert-info">No hay lotes que coincidan con la búsqueda y la categoría elegidas.</div>
+      </div>
+    }
+  </div>
+}
