@@ -1,4 +1,4 @@
-# Gestión Ganadera El Puente
+# Examen Final Gestión Ganadera El Puente
 
 Aplicación web en Angular para el comercio de ganado bovino: consultar los lotes disponibles,
 registrar ventas por cabeza, revisar su historial y marcarlas como entregadas o anularlas.
