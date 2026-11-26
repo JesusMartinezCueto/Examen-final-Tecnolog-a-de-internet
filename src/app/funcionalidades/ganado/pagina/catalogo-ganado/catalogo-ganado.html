@@ -66,7 +66,7 @@
     @for (lote of filtrados(); track lote.id) {
       <div class="col-12 col-sm-6 col-xl-4">
         <app-lote-tarjeta [lote]="lote" (vender)="venderLote($event)"
-          (cambiarEstado)="cambiarEstado($event)"
+          (editar)="editarLote($event)"
         />
       </div>
     } @empty {

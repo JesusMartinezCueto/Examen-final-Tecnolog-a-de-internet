@@ -42,13 +42,8 @@
     >
       Registrar venta
     </button>
-    <button
-      type="button"
-      class="btn btn-sm w-100"
-      [ngClass]="lote().activo ? 'btn-outline-secondary' : 'btn-outline-success'"
-      (click)="cambiarEstado.emit(lote())"
-    >
-      {{ lote().activo ? 'Inactivar' : 'Activar' }}
+    <button type="button" class="btn btn-sm btn-outline-secondary w-100" (click)="editar.emit(lote())">
+      Editar lote
     </button>
   </div>
 </article>

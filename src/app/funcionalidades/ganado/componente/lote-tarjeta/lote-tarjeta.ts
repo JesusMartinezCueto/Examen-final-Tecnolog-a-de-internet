@@ -12,7 +12,7 @@ import { Lote } from '../../../../compartido/modelos/lote';
 export class LoteTarjeta {
   readonly lote = input.required<Lote>();
   readonly vender = output<Lote>();
-  readonly cambiarEstado = output<Lote>();
+  readonly editar = output<Lote>();
 
   readonly nivelStock = computed(() => {
     const n = this.lote().existencias;

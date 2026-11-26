@@ -40,6 +40,11 @@ export class CatalogoGanado implements OnInit {
   });
 
   async ngOnInit() {
+    // Mensaje enviado por el formulario de registro/edición al volver.
+    const texto = history.state?.mensaje;
+    if (typeof texto === 'string') {
+      this.mensaje.set({ tipo: 'success', texto });
+    }
     try {
       this.lotes.set(await this.db.listarLotes());
     } catch (e) {
@@ -56,19 +61,9 @@ export class CatalogoGanado implements OnInit {
     this.verInactivos.set(false);
   }
 
-  /** Activa o inactiva el lote (borrado lógico). */
-  async cambiarEstado(lote: Lote) {
-    this.mensaje.set(null);
-    try {
-      const actualizado = await this.db.cambiarEstadoLote(lote.id, !lote.activo);
-      this.lotes.update((ls) => ls.map((l) => (l.id === actualizado.id ? actualizado : l)));
-      this.mensaje.set({
-        tipo: 'success',
-        texto: `Lote "${lote.nombre}" ${actualizado.activo ? 'activado' : 'inactivado'}.`,
-      });
-    } catch (e) {
-      this.mensaje.set({ tipo: 'danger', texto: e instanceof Error ? e.message : 'No se pudo cambiar el estado.' });
-    }
+  /** Abre el formulario de edición del lote (ahí también se activa/inactiva). */
+  editarLote(lote: Lote) {
+    this.router.navigate(['/catalogo', lote.id, 'editar']);
   }
 
   /** Acción que llega desde la tarjeta hija mediante output(). */

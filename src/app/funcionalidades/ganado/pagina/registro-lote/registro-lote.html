@@ -1,4 +1,8 @@
-<h1 class="h3 mb-3">Registrar animales</h1>
+<h1 class="h3 mb-3">{{ idLote() ? 'Editar lote' : 'Registrar animales' }}</h1>
+
+@if (cargando()) {
+  <div class="text-center py-5"><div class="spinner-border text-success" role="status"></div></div>
+} @else {
 
 <form [formGroup]="form" (ngSubmit)="guardar()" novalidate>
   <div class="card card-body">
@@ -45,6 +49,18 @@
         <textarea id="descripcion" rows="2" class="form-control" formControlName="descripcion" [ngClass]="{ 'is-invalid': invalido('descripcion') }"></textarea>
         <div class="invalid-feedback">Máximo 200 caracteres.</div>
       </div>
+
+      @if (idLote()) {
+        <div class="col-12">
+          <div class="form-check form-switch">
+            <input id="activo" class="form-check-input" type="checkbox" role="switch" formControlName="activo" />
+            <label class="form-check-label" for="activo">
+              Lote activo
+              <span class="text-muted small">(si lo desactiva, no aparecerá en el catálogo ni se podrá vender)</span>
+            </label>
+          </div>
+        </div>
+      }
     </div>
 
     @if (error()) {
@@ -62,3 +78,4 @@
     </div>
   </div>
 </form>
+}

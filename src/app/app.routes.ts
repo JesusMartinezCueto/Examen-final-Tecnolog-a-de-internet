@@ -16,6 +16,7 @@ export const routes: Routes = [
       { path: 'inicio', component: Inicio, title: 'Inicio | Ganadería El Puente' },
       { path: 'catalogo', component: CatalogoGanado, title: 'Catálogo | Ganadería El Puente' },
       { path: 'catalogo/nuevo', component: RegistroLote, title: 'Registrar animales | Ganadería El Puente' },
+      { path: 'catalogo/:id/editar', component: RegistroLote, title: 'Editar lote | Ganadería El Puente' },
       { path: 'ventas', component: HistorialVentas, title: 'Ventas | Ganadería El Puente' },
       { path: 'ventas/nueva', component: RegistroVenta, title: 'Nueva venta | Ganadería El Puente' },
       { path: 'ventas/:id', component: DetalleVenta, title: 'Detalle de venta | Ganadería El Puente' },

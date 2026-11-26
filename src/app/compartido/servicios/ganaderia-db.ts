@@ -111,17 +111,15 @@ export class GanaderiaDb {
     );
   }
 
-  /** Activa o inactiva un lote. Un lote inactivo no se puede vender. */
-  cambiarEstadoLote(id: number, activo: boolean): Promise<Lote> {
+  /** Actualiza los datos de un lote, incluido su estado (activo / inactivo). */
+  actualizarLote(lote: Lote): Promise<void> {
     return this.transaccion([LOTES], 'readwrite', async (tx) => {
       const lotes = tx.objectStore(LOTES);
-      const lote = (await peticion(lotes.get(id))) as Lote | undefined;
-      if (!lote) {
+      const existente = (await peticion(lotes.get(lote.id))) as Lote | undefined;
+      if (!existente) {
         throw new Error('El lote no existe.');
       }
-      lote.activo = activo;
       await peticion(lotes.put(lote));
-      return lote;
     });
   }
 
